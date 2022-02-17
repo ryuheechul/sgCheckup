@@ -62,6 +62,7 @@ type securityGroupRow struct {
 	ips                  []string
 	inUse                bool
 	isDefault            bool
+	isProd               bool
 	portRanges           []string
 	isLargePublicBlock   bool
 	largeRangeCount      bool
@@ -142,6 +143,7 @@ type Row struct {
 	PublicIps   []string
 	InUse       bool
 	IsDefault   bool
+	IsProd      bool
 	Notes       []string
 	UnsafePorts *multirange.MultiRange
 }
@@ -311,6 +313,9 @@ func analyzeSecurityGroupResults(results []securityGroupRow, safePorts []int) ([
 				status = "yellow"
 			}
 		}
+
+		isProd := strings.Contains(row.groupName, "prod")
+
 		reportRows = append(reportRows, Row{
 			Arn:         row.arn,
 			Url:         consoleUrl(row.arn),
@@ -320,6 +325,7 @@ func analyzeSecurityGroupResults(results []securityGroupRow, safePorts []int) ([
 			PublicIps:   row.ips,
 			InUse:       row.inUse,
 			IsDefault:   row.isDefault,
+			IsProd:      isProd,
 			Notes:       row.notes(unsafePorts),
 			UnsafePorts: unsafePorts,
 		})

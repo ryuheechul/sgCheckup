@@ -102,6 +102,7 @@
             <th>Status</th>
             <th>In&nbsp;Use</th>
             <th>Is&nbsp;Default</th>
+            <th>Is&nbsp;Prod</th>
             <th>Public IPs</th>
             <th>Notes</th>
           </tr>
@@ -111,10 +112,17 @@
           {{range $index, $row := .Rows}}
           <tr>
             <td>{{inc $index}}</td>
-            <td class="identifier"><a href="{{$row.Url}}" target="_blank" rel="nofollow">{{$row.Name}}</a></td>
+            <td class="identifier"><a title="{{$row.Name}}" href="{{$row.Url}}" target="_blank" rel="nofollow">{{-
+              if ge (len $row.Name) 20 -}}
+                {{- printf "%.20s" $row.Name -}}...
+              {{- else -}}
+                {{- $row.Name -}}
+              {{- end
+            -}}</a></td>
             <td class="{{$row.Status}}">{{$row.Status}}</td>
             <td>{{yn $row.InUse}}</td>
             <td>{{yn $row.IsDefault}}</td>
+            <td>{{yn $row.IsProd}}</td>
             <td>
               {{ if eq $row.Ips.Len 0 }}
               -
